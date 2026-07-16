@@ -22,29 +22,26 @@ Outbound internet for private instances is provided through a NAT Gateway.
 
 ## Architecture
 
+```mermaid
+flowchart TB
+    IGW[Internet Gateway] --- PUBRT[Public Route Table - 0.0.0.0/0 to IGW]
+    subgraph VPC[VPC 10.0.0.0/16]
+      PA[Public Subnet A 10.0.1.0/24]
+      PB[Public Subnet B 10.0.2.0/24]
+      NAT[NAT Gateway plus EIP]
+      RA[Private Subnet A 10.0.11.0/24 - App / DB]
+      RB[Private Subnet B 10.0.12.0/24 - App / DB]
+    end
+    PUBRT --- PA
+    PUBRT --- PB
+    NAT --> IGW
+    PRIVRT[Private Route Table - 0.0.0.0/0 to NAT] --- RA
+    PRIVRT --- RB
+    RA -->|outbound only| NAT
+    RB -->|outbound only| NAT
 ```
-VPC 10.0.0.0/16
-+-------------------------------------------------------------+
-|                                                             |
-|   Public Subnet (10.0.1.0/24)      Public Subnet (10.0.2.0/24)
-|   +-------------------+            +-------------------+     |
-|   |  NAT Gateway      |            |  Bastion / ALB    |     |
-|   +---------+---------+            +-------------------+     |
-|             |                                               |
-|        [ Route: 0.0.0.0/0 -> IGW ]                          |
-|                                                             |
-|   Private Subnet (10.0.11.0/24)    Private Subnet (10.0.12.0/24)
-|   +-------------------+            +-------------------+     |
-|   |  App Tier (EC2)   |            |  DB Tier (RDS)    |     |
-|   +-------------------+            +-------------------+     |
-|        [ Route: 0.0.0.0/0 -> NAT Gateway ]                  |
-|                                                             |
-+----------------------------+--------------------------------+
-                             |
-                     Internet Gateway
-                             |
-                         Internet
-```
+
+> Full diagram details: [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ---
 
