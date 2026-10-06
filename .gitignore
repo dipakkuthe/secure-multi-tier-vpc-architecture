@@ -1,0 +1,24 @@
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Terraform state and local configuration
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+terraform.tfvars
+terraform.tfvars.json
+
+# Build, logs and OS files
+node_modules/
+*.log
+.DS_Store
+.vscode/
+.idea/
